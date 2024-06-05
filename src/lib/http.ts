@@ -33,7 +33,8 @@ export class HttpError extends Error {
     payload: any;
     message?: string;
   }) {
-    super(message);
+    // Gọi constructor của class Error truyền message vào
+    super(message); // Truyền message mặc định cho Error (đang extends Error)
     this.status = status;
     this.payload = payload;
   }
