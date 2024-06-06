@@ -1,18 +1,18 @@
 import { z } from "zod";
 
 const configSchema = z.object({
-  NEXT_PUNLIC_API_END_POINT: z.string(),
-  NEXT_PUNLIC_URL: z.string(),
+  NEXT_PUBLIC_API_ENDPOINT: z.string(),
+  NEXT_PUBLIC_URL: z.string(),
 });
 
 const configProject = configSchema.safeParse({
-  NEXT_PUNLIC_API_END_POINT: process.env.NEXT_PUNLIC_API_END_POINT,
-  NEXT_PUNLIC_URL: process.env.NEXT_PUNLIC_URL,
+  NEXT_PUBLIC_API_ENDPOINT: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
 });
 
 if (!configProject.success) {
   console.error(configProject.error.errors);
-  throw new Error("ENV không hợp lệ");
+  throw new Error("Các khai báo biến môi trường không hợp lệ");
 }
 
 const envConfig = configProject.data;
