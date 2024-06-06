@@ -27,8 +27,12 @@ export const authApiRequest = {
         },
       }
     ),
-  logout: (body: LogoutBodyType) =>
-    http.post("api/auth/logout", body, {
-      baseUrl: "",
-    }),
+  logout: () =>
+    http.post<{ message: string }>(
+      "api/auth/logout",
+      {},
+      {
+        baseUrl: "",
+      }
+    ),
 };
