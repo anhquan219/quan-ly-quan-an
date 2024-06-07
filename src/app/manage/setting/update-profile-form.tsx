@@ -14,13 +14,16 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUploadMediaMuation } from "@/queries/useMedia";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useAccountProfile } from "@/queries/useAccount";
+import { useAccountMe, useUpdateMeMutation } from "@/queries/useAccount";
+import { toast } from "@/components/ui/use-toast";
+import { handleErrorApi } from "@/lib/utils";
 
 export default function UpdateProfileForm() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const uploadMediaMutaion = useUploadMediaMuation();
-  const { data } = useAccountProfile();
+  const updateMeMutation = useUpdateMeMutation();
+  const { data, refetch } = useAccountMe();
   const form = useForm<UpdateMeBodyType>({
     resolver: zodResolver(UpdateMeBody),
     defaultValues: {
@@ -48,11 +51,46 @@ export default function UpdateProfileForm() {
     return avatar;
   }, [avatar, file]);
 
+  const resetForm = () => {
+    form.reset();
+    setFile(null);
+  };
+
+  const onSubmit = async (value: UpdateMeBodyType) => {
+    if (updateMeMutation.isPending) return;
+    try {
+      let body = value;
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const uploadImageResold = await uploadMediaMutaion.mutateAsync(
+          formData
+        );
+        const imageUrl = uploadImageResold.payload.data;
+        body = {
+          ...value,
+          avatar: imageUrl,
+        };
+      }
+      const result = await updateMeMutation.mutateAsync(body);
+      toast({
+        description: result.payload.message,
+      });
+      refetch();
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError });
+    }
+  };
+
   return (
     <Form {...form}>
       <form
         noValidate
         className="grid auto-rows-max items-start gap-4 md:gap-8"
+        onReset={resetForm}
+        onSubmit={form.handleSubmit(onSubmit, (err) => {
+          console.warn(err);
+        })}
       >
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
@@ -81,6 +119,9 @@ export default function UpdateProfileForm() {
                           const file = e.target.files?.[0];
                           if (file) {
                             setFile(file);
+                            field.onChange(
+                              "http://localhost:3000/" + field.name
+                            );
                           }
                         }}
                       />
