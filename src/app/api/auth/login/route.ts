@@ -31,7 +31,7 @@ export async function POST(requst: Request) {
   } catch (error) {
     if (error instanceof HttpError) {
       return Response.json(error.payload, {
-        status: error,
+        status: error.status,
       });
     } else {
       return Response.json(
