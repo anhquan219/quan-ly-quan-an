@@ -140,6 +140,7 @@ const request = async <Response>(
           }
         }
       } else {
+        // TH khi accessToken còn hạn
         const accessToken = (options?.headers as any)?.Authorization.split(
           "Bearer "
         )[1];

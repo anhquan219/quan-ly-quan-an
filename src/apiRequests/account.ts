@@ -7,6 +7,12 @@ import {
 
 export const accountApiRequest = {
   me: () => http.get<AccountResType>("/accounts/me"),
+  sMe: (accessToken: string) =>
+    http.get<AccountResType>("accounts/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
   update: (body: UpdateMeBodyType) =>
     http.put<AccountResType>("/accounts/me", body),
   changePassword: (body: ChangePasswordBodyType) =>
