@@ -50,3 +50,11 @@ export const getAccessTokenFromLocalStoreage = () => {
 export const getRefreshTokenFromLocalStoreage = () => {
   return isBrower ? localStorage.getItem("refreshToken") : null;
 };
+
+export const setAccessTokenToLocalStoreage = (value: string) => {
+  return isBrower && localStorage.setItem("accessToken", value);
+};
+
+export const setRefreshTokenToLocalStoreage = (value: string) => {
+  return isBrower && localStorage.setItem("refreshToken", value);
+};
