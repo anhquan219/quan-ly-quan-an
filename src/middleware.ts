@@ -10,12 +10,14 @@ export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get("refreshToken")?.value;
 
   // Chưa đăng nhập => Không cho vào privatePaths
-  if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
+    const url = new URL("/login", request.url);
+    url.searchParams.set("clearToken", "true");
+    return NextResponse.redirect(url);
   }
 
   // Đã đăng nhập => Không cho vào unAuthPaths
-  if (unAuthPaths.some((path) => pathname.startsWith(path)) && accessToken) {
+  if (unAuthPaths.some((path) => pathname.startsWith(path)) && refreshToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

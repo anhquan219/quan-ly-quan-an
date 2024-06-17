@@ -1,8 +1,7 @@
 "use client";
 
-import { getAccessTokenFromLocalStoreage } from "@/lib/utils";
+import { useAppContext } from "@/components/app-provider";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 const menuItems = [
   {
@@ -27,12 +26,7 @@ const menuItems = [
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-  const [isAuth, setIsAuth] = useState(false);
-
-  // Không nên check thay đổi isAuth trong qua trinh render (trong phần render HTML)
-  useEffect(() => {
-    setIsAuth(Boolean(getAccessTokenFromLocalStoreage()));
-  }, []);
+  const { isAuth } = useAppContext();
 
   return menuItems.map((item) => {
     if (
