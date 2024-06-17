@@ -100,11 +100,16 @@ export default function EditEmployee({
       toast({
         description: result.payload.message,
       });
-      setId(undefined); // Không có ID thì Modal sẽ đóng (Dòng 122)
+      reset();
       onSubmitSuccess && onSubmitSuccess();
     } catch (error) {
       handleErrorApi({ error, setError: form.setError });
     }
+  };
+
+  const reset = () => {
+    setId(undefined); // Không có ID thì Modal sẽ đóng (Dòng 122)
+    setFile(null); // Clear khi tắt Form
   };
 
   return (
@@ -112,7 +117,7 @@ export default function EditEmployee({
       open={Boolean(id)} // Nếu có ID thì hiển thị Modal
       onOpenChange={(value) => {
         if (!value) {
-          setId(undefined);
+          reset();
         }
       }}
     >
