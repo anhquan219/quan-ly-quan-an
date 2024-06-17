@@ -1,11 +1,13 @@
+"use client";
+
 import {
   checkAndRefreshToken,
   getRefreshTokenFromLocalStoreage,
 } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 
-export default function RefreshTokenPage() {
+function RefreshToken() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectpathname = searchParams.get("redirect");
@@ -18,7 +20,7 @@ export default function RefreshTokenPage() {
     ) {
       checkAndRefreshToken({
         onSuccess: () => {
-          // Redirect đén trang đang truy cập trước đó
+          // Redirect đến trang đang truy cập trước đó
           router.push(redirectpathname || "/");
         },
       });
@@ -28,4 +30,12 @@ export default function RefreshTokenPage() {
   }, [router, refreshTokenFromUrl]);
 
   return <div>RefreshToken ...</div>;
+}
+
+export default function RefreshTokenPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RefreshToken />
+    </Suspense>
+  );
 }
