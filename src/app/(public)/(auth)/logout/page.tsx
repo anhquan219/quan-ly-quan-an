@@ -1,3 +1,4 @@
+import { useAppContext } from "@/components/app-provider";
 import {
   getAccessTokenFromLocalStoreage,
   getRefreshTokenFromLocalStoreage,
@@ -10,6 +11,7 @@ export default function LogoutPage() {
   const { mutateAsync } = useLogoutMutation();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { setIsAuth } = useAppContext();
   const refreshTokenFromUrl = searchParams.get("refreshToken");
   const accessTokenFromUrl = searchParams.get("accessToken");
   const ref = useRef<any>(null); // Tránh gọi liên tục 2 lần
@@ -24,6 +26,7 @@ export default function LogoutPage() {
     ) {
       ref.current = mutateAsync;
       mutateAsync().then((res) => {
+        setIsAuth(false);
         setTimeout(() => {
           ref.current = null;
         }, 1000);
