@@ -56,7 +56,7 @@ export const useDeleteDishMutation = () => {
     mutationFn: dishApiRequest.deleteDish,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["accounts"],
+        queryKey: ["dishes"],
       });
     },
   });
