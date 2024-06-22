@@ -61,7 +61,6 @@ export default function EditTable({
       changeToken: false,
     },
   });
-  const tableNumber = 0;
 
   useEffect(() => {
     if (data) {
@@ -133,7 +132,7 @@ export default function EditTable({
                       id="number"
                       type="number"
                       className="w-full"
-                      value={tableNumber}
+                      value={data?.payload.data.number}
                       readOnly
                     />
                     <FormMessage />
